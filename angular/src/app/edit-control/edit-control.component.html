@@ -1,0 +1,120 @@
+<form
+  class="form-horizontal"
+  autocomplete="off"
+  #editControlModal="ngForm"
+  (ngSubmit)="editControlModal.valid && save() "
+>
+    <abp-modal-header
+    [title]="'Edit Control' | localize"
+    (onCloseClick)="bsModalRef.hide()"
+    ></abp-modal-header>
+     <div class="modal-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label for="pinNumber">
+                        {{ "Pin Number" | localize }}
+                    </label>
+                    <input
+                    [class.is-invalid]="editControlModal.submitted && !pinNumberModel.valid"
+                    class="form-control"
+                    type="text"
+                    name="pinNumber" 
+                    id="pinNumber" 
+                    required 
+                    [(ngModel)]="control.pinNumber" 
+                    #pinNumberModel="ngModel" 
+                    >
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label for="cars">Value Type</label>
+
+                    <select
+                    class="form-control"
+                    name="ValueType" 
+                    id="ValueType" 
+                    required 
+                    [(ngModel)]="control.valueType" 
+                    #pinNumberModel="ngModel" 
+                    >
+                    <option value="0">Digital</option>
+                    <option value="1">Analog</option>
+                    <option value="2">Serial</option>
+                    </select>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label for="ValueString">
+                        {{ "Value String" | localize }}
+                    </label>
+                    <input
+                    [class.is-invalid]="editControlModal.submitted && !ValueStringModel.valid"
+                    class="form-control"
+                    type="text"
+                    name="ValueString" 
+                    id="ValueString" 
+                    required
+                    [(ngModel)]="control.valueString" 
+                    #ValueStringModel="ngModel" 
+                    >
+                </div>
+           
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label for="valueDigital">
+                        {{ "value Digital" | localize }}
+                    </label>
+                    <input
+                    [class.is-invalid]="editControlModal.submitted && !valueDigitalModel.valid"
+                    class="form-control"
+                    type="text"
+                    name="valueDigital" 
+                    id="valueDigital" 
+                    required 
+                    [(ngModel)]="control.valueDigital" 
+                    #valueDigitalModel="ngModel" 
+                    >
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label for="ValueAnalog ">
+                        {{ "Value Analog" | localize }}
+                    </label>
+                    <input
+                    [class.is-invalid]="editControlModal.submitted && !ValueAnalogModel.valid"
+                    class="form-control"
+                    type="text"
+                    name="ValueAnalog " 
+                    id="ValueAnalog " 
+                    required
+                    [(ngModel)]="control.valueAnalog" 
+                    #ValueAnalogModel="ngModel" 
+                    >
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <hr>
+        <button mat-raised-button color="primary" type="submit" class="float-right"> {{ "Save" | localize }}</button>
+        <button mat-raised-button class="btn-secondary" type="button" (click)="bsModalRef.hide()"> {{ "Cancel" | localize }}</button>
+        <div class="clear-fix"></div>
+    </div>
+
+</form>

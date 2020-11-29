@@ -1,0 +1,46 @@
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6">
+                <h1>{{ "Create Device" | localize }}</h1>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content px-2">
+    <div class="container-fluid">
+        <form class="form-horizontal" autocomplete="off" #createDeviceForm="ngForm"
+            (ngSubmit)="createDeviceForm.valid && save()">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group required">
+                            <label for="deviceName">
+                                {{ "Device Name*" | localize }}
+                            </label>
+                            <input
+                            [class.is-invalid]="createDeviceForm.submitted && !nameModel.valid"
+                            class="form-control"
+                            type="text"
+                            name="deviceName" 
+                            id="deviceName" 
+                            required 
+                            [(ngModel)]="device.deviceName" 
+                            #nameModel="ngModel" 
+                            >
+                            <div 
+                            *ngIf="createDeviceForm.submitted && !nameModel.valid">
+                            <div *ngIf="nameModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
+                                Device Name is required
+                            </div>
+                        </div>
+                        </div>
+                       
+                          
+                    </div>
+                </div>
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit">{{ "Save" | localize }} </button>
+            </div>
+        </form>
+    </div>
+</section>

@@ -1,0 +1,165 @@
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6">
+                <h1>{{ "Add Connection" | localize }}</h1>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content px-2">
+    <div class="container-fluid">
+        <form class="form-horizontal" autocomplete="off" #addconnectionForm="ngForm"
+            (ngSubmit)="save()">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="secretkey">
+                                {{ "User Secret Key" | localize }}
+                            </label>
+                            <input
+                            disabled
+                            class="form-control"
+                            type="text"
+                            name="secretkey" 
+                            id="secretkey" 
+                            required 
+                            [(ngModel)]="secretkey" 
+                            #secretkeyModel="ngModel" 
+                            >
+                        </div>   
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group required">
+                            <label for="publickey">
+                                {{ "Public Key" | localize }}
+                            </label>
+                            <input
+                            disabled
+                            class="form-control"
+                            type="text"
+                            name="publickey" 
+                            id="publickey" 
+                            required 
+                            [(ngModel)]="device.publicKey" 
+                            #publickeyModel="ngModel" 
+                            >
+                        </div>   
+                    </div>
+                    
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="devicename">
+                                {{ "Device Name" | localize }}
+                            </label>
+                            <input
+                            disabled
+                            class="form-control"
+                            type="text"
+                            name="devicename" 
+                            id="devicename" 
+                            required 
+                            [(ngModel)]="device.deviceName" 
+                            #devicenameModel="ngModel" 
+                            >
+                        </div>   
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group required">
+                            <label for="ip">
+                                {{ "IP" | localize }}
+                            </label>
+                            <input
+                            disabled
+                            class="form-control"
+                            type="text"
+                            name="ip" 
+                            id="ip" 
+                            required 
+                            [(ngModel)]="device.ip" 
+                            #ipModel="ngModel" 
+                            >
+                        </div>   
+                    </div>
+                    
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="devicename">
+                                {{ "Status" | localize }}
+                            </label>
+                            <input
+                            disabled
+                            class="form-control"
+                            type="text"
+                            name="Status" 
+                            id="Status" 
+                            required 
+                            [(ngModel)]="status" 
+                            #StatusModel="ngModel" 
+                            >
+                        </div>   
+                    </div>
+                    
+                </div>
+
+
+
+
+
+        
+        <table class="table table-hover text-nowrap">
+            <thead class="bg-light">
+                <th> {{ "Pin Number" | localize }}</th>
+                <th>{{ "Value String " | localize }}</th>
+                <th>{{ "Value Digital " | localize }}</th>
+                <th>{{ "Value Analog " | localize }}</th>
+                <th>{{ "Value Type " | localize }}</th>
+                <th>{{ "IsAccessed " | localize }}</th>
+                <th style="width: 450px;">
+                    <a class="btn btn-primary" href="javascript:;" (click)="createControl()">
+                         <i class="fa fa-plus-square"></i>
+                        {{ "Create Control" | localize }}
+                    </a>
+                </th>
+            </thead>
+            <tbody>
+                <tr *ngIf="!conrols.length">
+                    <td class="text-center font-italic" colspan="7">
+                        {{ "No control selected for this device" | localize }}
+                    </td>
+                </tr>
+                <tr *ngFor="let item of conrols ; let i=index">
+                    <td>{{item.pinNumber}}</td>
+                    <td>{{item.valueString}}</td>
+                    <td>{{item.valueDigital}}</td>
+                    <td>{{item.valueAnalog}}</td>
+                    <td>{{item.valueType}}</td>
+                    <td>{{item.isAccessed}}</td>
+                    
+                    <td>
+                        <button type="button" class="btn btn-sm bg-secondary" (click)="editControl(i)">
+                            <i class="fas fa-pencil-alt"></i>
+                            {{ "Edit" | localize }}
+                        </button>
+                        <button type="button" class="btn btn-sm bg-danger mx-2" (click)="delete(i)">
+                            <i class="fas fa-trash"></i>
+                            {{ "Delete" | localize }}
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">{{ "Save" | localize }} </button>
+        </div>
+    </form>
+    </div>
+</section>
