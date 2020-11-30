@@ -9,5 +9,6 @@ namespace DeviceControlService
     public interface IDeviceControlAppService : IApplicationService
     {
         Task CreateControl(CreateControlInputDto.CreateControlInputDto input);
+        Task<GetValueControlOutputDto.GetValueControlOutputDto> GetValueControl(ReadingValueInputDto.ReadingValueInputDto input);
     }
 }

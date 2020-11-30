@@ -4,7 +4,7 @@ import { AddControlComponent } from '@app/add-control/add-control.component';
 import { ControlServiceService } from '@app/control-service/control-service.service';
 import { EditControlComponent } from '@app/edit-control/edit-control.component';
 import { AppComponentBase } from '@shared/app-component-base';
-import { CreateControlInputDto, DeviceControlServiceProxy, DeviceDto, DeviceServiceProxy } from '@shared/service-proxies/service-proxies';
+import { CreateControlInputDto, DeviceControlServiceProxy, DeviceDto, DeviceReadingDto, DeviceReadingServiceProxy, DeviceServiceProxy } from '@shared/service-proxies/service-proxies';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
@@ -18,6 +18,7 @@ export class AddConnectionComponent extends AppComponentBase implements OnInit {
   secretkey;
   status;
   conrols : CreateControlInputDto[] = [];
+  readings : DeviceReadingDto[] = [];
   constructor(njector: Injector,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
@@ -25,6 +26,7 @@ export class AddConnectionComponent extends AppComponentBase implements OnInit {
     public _deviceControlService: DeviceControlServiceProxy,
     private _modalService: BsModalService,
     public controlServiceService : ControlServiceService,
+    public deviceReadingServiceProxy : DeviceReadingServiceProxy,
     private router: Router,
     )
      {
@@ -42,9 +44,11 @@ export class AddConnectionComponent extends AppComponentBase implements OnInit {
           this.status = "Active"
         }
       });
-
-    this.secretkey = this.appSession.user.secretKey
-    console.log(this.appSession.user.devices)
+    this.secretkey = this.appSession.user.secretKey;
+    this.deviceReadingServiceProxy.getAllReadingForDevice(this.id).subscribe((res) =>{
+      this.readings = res;
+      console.log(this.readings)
+    })
   }
 
   createControl(): void {
@@ -111,6 +115,7 @@ export class AddConnectionComponent extends AppComponentBase implements OnInit {
         console.log("ok")
       })
       abp.notify.success(this.l('SuccessfullySaved'));
+      this.controlServiceService.controls = [];
     });
     this.router.navigate(['app/home']);
 

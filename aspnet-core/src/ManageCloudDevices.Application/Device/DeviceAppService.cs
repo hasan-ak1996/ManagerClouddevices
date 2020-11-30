@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using update.DTO;
+using System.Linq;
+using Abp.Domain.Repositories;
+using ManageCloudDevices.Authorization.Users;
 
 namespace ManageCloudDevices.Device
 {
@@ -14,11 +17,18 @@ namespace ManageCloudDevices.Device
     {
         private readonly DeviceManager.DeviceManager deviceManager;
         private readonly IMapper objectMapper;
+        private readonly UserManager _userManager;
+        private readonly IRepository<ManageCloudDevices.Models.Device> deviceRepository;
 
-        public DeviceAppService(DeviceManager.DeviceManager deviceManager, IMapper objectMapper)
+        public DeviceAppService(DeviceManager.DeviceManager deviceManager, IMapper objectMapper,
+             UserManager userManager,
+             IRepository<ManageCloudDevices.Models.Device> deviceRepository
+           )
         {
             this.deviceManager = deviceManager;
             this.objectMapper = objectMapper;
+            _userManager = userManager;
+            this.deviceRepository = deviceRepository;
         }
         public async Task CreateDevice(DeviceInputDto input)
         {
@@ -45,9 +55,19 @@ namespace ManageCloudDevices.Device
             return output;
         }
 
-        public Task UpdateDevice(DeviceUpdateInputDto input)
+
+        public async Task UpdateDeviceFromSystem(DeviceUpdateInputDto input)
         {
-            throw new NotImplementedException();
+           var user =  _userManager.Users.Where(u => u.SecretKey == input.SecretKey).FirstOrDefault();
+            var userId = user.Id;
+            var devicesFromUser = deviceRepository.GetAll().Where(d => d.UserId == userId).ToList();
+           var device = devicesFromUser.Where(d => d.PublicKey == input.PublicKey).FirstOrDefault();
+            device.IP = input.IP;
+            device.PrivateKey = input.PrivateKey;
+            await deviceManager.UpdateDeviceFromSystem(device);
+
+
+
         }
     }
 }

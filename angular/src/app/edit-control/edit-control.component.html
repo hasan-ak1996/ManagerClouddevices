@@ -37,6 +37,7 @@
                     name="ValueType" 
                     id="ValueType" 
                     required 
+                    (change)="selectValue(control.valueType)"
                     [(ngModel)]="control.valueType" 
                     #pinNumberModel="ngModel" 
                     >
@@ -62,6 +63,7 @@
                     type="text"
                     name="ValueString" 
                     id="ValueString" 
+                    [disabled]="serialdisabled"
                     required
                     [(ngModel)]="control.valueString" 
                     #ValueStringModel="ngModel" 
@@ -78,10 +80,10 @@
                     <input
                     [class.is-invalid]="editControlModal.submitted && !valueDigitalModel.valid"
                     class="form-control"
-                    type="text"
+                    type="checkbox"
                     name="valueDigital" 
                     id="valueDigital" 
-                    required 
+                    [disabled]="digitaldisabled"
                     [(ngModel)]="control.valueDigital" 
                     #valueDigitalModel="ngModel" 
                     >
@@ -100,7 +102,7 @@
                     type="text"
                     name="ValueAnalog " 
                     id="ValueAnalog " 
-                    required
+                    [disabled]="analogdisabled"
                     [(ngModel)]="control.valueAnalog" 
                     #ValueAnalogModel="ngModel" 
                     >
@@ -112,8 +114,8 @@
 
 
         <hr>
-        <button mat-raised-button color="primary" type="submit" class="float-right"> {{ "Save" | localize }}</button>
-        <button mat-raised-button class="btn-secondary" type="button" (click)="bsModalRef.hide()"> {{ "Cancel" | localize }}</button>
+        <button type="submit" class="btn btn-primary float-right"> {{ "Save" | localize }}</button>
+        <button class="btn btn-secondary" type="button" (click)="bsModalRef.hide()"> {{ "Cancel" | localize }}</button>
         <div class="clear-fix"></div>
     </div>
 

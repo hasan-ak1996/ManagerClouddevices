@@ -12,6 +12,9 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 export class EditControlComponent extends AppComponentBase  implements OnInit {
   saving = false;
   id: number;
+  analogdisabled : boolean;
+  digitaldisabled : boolean;
+  serialdisabled : boolean ;
   control = new CreateControlInputDto ();
   @Output() onSave = new EventEmitter<any>();
   constructor(injector: Injector,
@@ -21,7 +24,21 @@ export class EditControlComponent extends AppComponentBase  implements OnInit {
      }
 
   ngOnInit(): void {
-    this.control  = this.controlServiceService.getItemByIndex(this.id)
+    this.control  = this.controlServiceService.getItemByIndex(this.id);
+    console.log(this.control.valueType)
+    if(this.control.valueType.toString() == "Analog"){
+      this.analogdisabled = false;
+      this.digitaldisabled = true;
+      this.serialdisabled = true;
+    }else if(this.control.valueType.toString() == "Digital"){
+      this.analogdisabled = true;
+      this.digitaldisabled = false;
+      this.serialdisabled = true;
+    }else{
+      this.analogdisabled = true;
+      this.digitaldisabled = true;
+      this.serialdisabled = false;
+    }
   }
 
   
@@ -31,6 +48,21 @@ export class EditControlComponent extends AppComponentBase  implements OnInit {
     this.notify.info(this.l('SavedSuccessfully'));
     this.bsModalRef.hide();
     this.onSave.emit();
+  }
+  selectValue(valType){
+    if(valType == "Analog"){
+      this.analogdisabled = false;
+      this.digitaldisabled = true;
+      this.serialdisabled = true;
+    }else if(valType == "Digital"){
+      this.analogdisabled = true;
+      this.digitaldisabled = false;
+      this.serialdisabled = true;
+    }else{
+      this.analogdisabled = true;
+      this.digitaldisabled = true;
+      this.serialdisabled = false;
+    }
   }
 
 }

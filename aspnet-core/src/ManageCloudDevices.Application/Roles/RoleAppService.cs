@@ -88,6 +88,7 @@ namespace ManageCloudDevices.Roles
 
             var role = await _roleManager.FindByIdAsync(input.Id.ToString());
             var users = await _userManager.GetUsersInRoleAsync(role.NormalizedName);
+            
 
             foreach (var user in users)
             {

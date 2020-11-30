@@ -381,8 +381,8 @@ export class DeviceServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    updateDevice(body: DeviceUpdateInputDto | undefined): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/Device/UpdateDevice";
+    updateDeviceFromSystem(body: DeviceUpdateInputDto | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Device/UpdateDeviceFromSystem";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -397,11 +397,11 @@ export class DeviceServiceProxy {
         };
 
         return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processUpdateDevice(response_);
+            return this.processUpdateDeviceFromSystem(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processUpdateDevice(<any>response_);
+                    return this.processUpdateDeviceFromSystem(<any>response_);
                 } catch (e) {
                     return <Observable<void>><any>_observableThrow(e);
                 }
@@ -410,7 +410,7 @@ export class DeviceServiceProxy {
         }));
     }
 
-    protected processUpdateDevice(response: HttpResponseBase): Observable<void> {
+    protected processUpdateDeviceFromSystem(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -491,6 +491,194 @@ export class DeviceControlServiceProxy {
             }));
         }
         return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param secretKey (optional) 
+     * @param publicKey (optional) 
+     * @param pinNumber (optional) 
+     * @return Success
+     */
+    getValueControl(secretKey: string | undefined, publicKey: string | undefined, pinNumber: string | null | undefined): Observable<GetValueControlOutputDto> {
+        let url_ = this.baseUrl + "/api/services/app/DeviceControl/GetValueControl?";
+        if (secretKey === null)
+            throw new Error("The parameter 'secretKey' cannot be null.");
+        else if (secretKey !== undefined)
+            url_ += "SecretKey=" + encodeURIComponent("" + secretKey) + "&";
+        if (publicKey === null)
+            throw new Error("The parameter 'publicKey' cannot be null.");
+        else if (publicKey !== undefined)
+            url_ += "PublicKey=" + encodeURIComponent("" + publicKey) + "&";
+        if (pinNumber !== undefined && pinNumber !== null)
+            url_ += "PinNumber=" + encodeURIComponent("" + pinNumber) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetValueControl(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetValueControl(<any>response_);
+                } catch (e) {
+                    return <Observable<GetValueControlOutputDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetValueControlOutputDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetValueControl(response: HttpResponseBase): Observable<GetValueControlOutputDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetValueControlOutputDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetValueControlOutputDto>(<any>null);
+    }
+}
+
+@Injectable()
+export class DeviceReadingServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    createReading(body: DeviceReadingInputDto | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/DeviceReading/CreateReading";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateReading(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateReading(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateReading(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getAllReadingForDevice(id: number | undefined): Observable<DeviceReadingDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/DeviceReading/GetAllReadingForDevice?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllReadingForDevice(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllReadingForDevice(<any>response_);
+                } catch (e) {
+                    return <Observable<DeviceReadingDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<DeviceReadingDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllReadingForDevice(response: HttpResponseBase): Observable<DeviceReadingDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(DeviceReadingDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<DeviceReadingDto[]>(<any>null);
     }
 }
 
@@ -2362,46 +2550,11 @@ export interface IDeviceDto {
     id: number;
 }
 
-export class Enum implements IEnum {
-
-    constructor(data?: IEnum) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): Enum {
-        data = typeof data === 'object' ? data : {};
-        let result = new Enum();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data; 
-    }
-
-    clone(): Enum {
-        const json = this.toJSON();
-        let result = new Enum();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IEnum {
-}
-
 export class DeviceUpdateInputDto implements IDeviceUpdateInputDto {
-    deviceName: string | undefined;
-    status: Enum;
+    secretKey: string;
+    publicKey: string;
+    ip: number;
+    privateKey: string | undefined;
 
     constructor(data?: IDeviceUpdateInputDto) {
         if (data) {
@@ -2414,8 +2567,10 @@ export class DeviceUpdateInputDto implements IDeviceUpdateInputDto {
 
     init(_data?: any) {
         if (_data) {
-            this.deviceName = _data["deviceName"];
-            this.status = _data["status"] ? Enum.fromJS(_data["status"]) : <any>undefined;
+            this.secretKey = _data["secretKey"];
+            this.publicKey = _data["publicKey"];
+            this.ip = _data["ip"];
+            this.privateKey = _data["privateKey"];
         }
     }
 
@@ -2428,8 +2583,10 @@ export class DeviceUpdateInputDto implements IDeviceUpdateInputDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["deviceName"] = this.deviceName;
-        data["status"] = this.status ? this.status.toJSON() : <any>undefined;
+        data["secretKey"] = this.secretKey;
+        data["publicKey"] = this.publicKey;
+        data["ip"] = this.ip;
+        data["privateKey"] = this.privateKey;
         return data; 
     }
 
@@ -2442,8 +2599,10 @@ export class DeviceUpdateInputDto implements IDeviceUpdateInputDto {
 }
 
 export interface IDeviceUpdateInputDto {
-    deviceName: string | undefined;
-    status: Enum;
+    secretKey: string;
+    publicKey: string;
+    ip: number;
+    privateKey: string | undefined;
 }
 
 export enum VlaueEnum {
@@ -2517,6 +2676,191 @@ export interface ICreateControlInputDto {
     valueAnalog: number;
     valueType: VlaueEnum;
     isAccessed: boolean;
+}
+
+export class GetValueControlOutputDto implements IGetValueControlOutputDto {
+    value: string | undefined;
+
+    constructor(data?: IGetValueControlOutputDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.value = _data["value"];
+        }
+    }
+
+    static fromJS(data: any): GetValueControlOutputDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetValueControlOutputDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["value"] = this.value;
+        return data; 
+    }
+
+    clone(): GetValueControlOutputDto {
+        const json = this.toJSON();
+        let result = new GetValueControlOutputDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetValueControlOutputDto {
+    value: string | undefined;
+}
+
+export enum My {
+    _0 = 0,
+    _1 = 1,
+    _2 = 2,
+}
+
+export class DeviceReadingInputDto implements IDeviceReadingInputDto {
+    deviceId: number;
+    readingName: string | undefined;
+    valueString: string | undefined;
+    valueDigital: boolean;
+    valueAnalog: number;
+    valueType: My;
+
+    constructor(data?: IDeviceReadingInputDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.deviceId = _data["deviceId"];
+            this.readingName = _data["readingName"];
+            this.valueString = _data["valueString"];
+            this.valueDigital = _data["valueDigital"];
+            this.valueAnalog = _data["valueAnalog"];
+            this.valueType = _data["valueType"];
+        }
+    }
+
+    static fromJS(data: any): DeviceReadingInputDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DeviceReadingInputDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["deviceId"] = this.deviceId;
+        data["readingName"] = this.readingName;
+        data["valueString"] = this.valueString;
+        data["valueDigital"] = this.valueDigital;
+        data["valueAnalog"] = this.valueAnalog;
+        data["valueType"] = this.valueType;
+        return data; 
+    }
+
+    clone(): DeviceReadingInputDto {
+        const json = this.toJSON();
+        let result = new DeviceReadingInputDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IDeviceReadingInputDto {
+    deviceId: number;
+    readingName: string | undefined;
+    valueString: string | undefined;
+    valueDigital: boolean;
+    valueAnalog: number;
+    valueType: My;
+}
+
+export enum ValEnum {
+    _0 = 0,
+    _1 = 1,
+    _2 = 2,
+}
+
+export class DeviceReadingDto implements IDeviceReadingDto {
+    readingName: string | undefined;
+    valueString: string | undefined;
+    valueDigital: boolean;
+    valueAnalog: number;
+    valueType: ValEnum;
+    creationTime: moment.Moment;
+    id: number;
+
+    constructor(data?: IDeviceReadingDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.readingName = _data["readingName"];
+            this.valueString = _data["valueString"];
+            this.valueDigital = _data["valueDigital"];
+            this.valueAnalog = _data["valueAnalog"];
+            this.valueType = _data["valueType"];
+            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): DeviceReadingDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DeviceReadingDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["readingName"] = this.readingName;
+        data["valueString"] = this.valueString;
+        data["valueDigital"] = this.valueDigital;
+        data["valueAnalog"] = this.valueAnalog;
+        data["valueType"] = this.valueType;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone(): DeviceReadingDto {
+        const json = this.toJSON();
+        let result = new DeviceReadingDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IDeviceReadingDto {
+    readingName: string | undefined;
+    valueString: string | undefined;
+    valueDigital: boolean;
+    valueAnalog: number;
+    valueType: ValEnum;
+    creationTime: moment.Moment;
+    id: number;
 }
 
 export class CreateRoleDto implements ICreateRoleDto {

@@ -1,24 +1,26 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.Application.Services.Dto;
+using Abp.AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ManageCloudDevices.Models.DeviceReading
+namespace ManageCloudDevices.DeviceReadingDTO
 {
-    public class DeviceReading : FullAuditedEntity<int>
+    [AutoMap(typeof(ManageCloudDevices.Models.DeviceReading.DeviceReading))]
+    public class DeviceReadingDto : EntityDto
     {
-        public int DeviceId { get; set; }
         public string ReadingName { get; set; }
         public string ValueString { get; set; }
         public bool ValueDigital { get; set; }
         public float ValueAnalog { get; set; }
-        public enum VlaueEnum
+        public enum ValEnum
         {
             Digital = 0,
             Analog = 1,
             Serial = 2
         }
-        public VlaueEnum ValueType { get; set; }
+        public ValEnum ValueType { get; set; }
+        public DateTime CreationTime { get; set; }
 
     }
 }

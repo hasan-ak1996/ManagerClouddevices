@@ -9,7 +9,9 @@ namespace update.DTO
     [AutoMapTo(typeof(Device))]
     public class DeviceUpdateInputDto
     {
-        public string DeviceName { get; set; }
-        public Enum Status { get; set; }
+        public Guid SecretKey { get; set; }
+        public Guid PublicKey { get; set; }
+        public int IP { get; set; }
+        public string PrivateKey { get; set; }
     }
 }

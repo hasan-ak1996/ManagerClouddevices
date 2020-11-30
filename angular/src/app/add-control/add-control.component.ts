@@ -13,7 +13,9 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 export class AddControlComponent extends AppComponentBase  implements OnInit {
   saving = false;
   control = new CreateControlInputDto ();
-  value : boolean;
+  analogdisabled : boolean = true;
+  digitaldisabled : boolean = true;
+  serialdisabled : boolean = true;
   @Output() onSave = new EventEmitter<any>();
   constructor( 
     injector: Injector,
@@ -25,7 +27,8 @@ export class AddControlComponent extends AppComponentBase  implements OnInit {
   }
 
   ngOnInit(): void {
-    this.control.valueString
+    this.control.valueString;
+    console.log(this.control.valueType)
     
   }
   save(): void {
@@ -35,6 +38,22 @@ export class AddControlComponent extends AppComponentBase  implements OnInit {
     this.bsModalRef.hide();
     this.onSave.emit();
   }
+  selectValue(valType){
+    if(valType == "Analog"){
+      this.analogdisabled = false;
+      this.digitaldisabled = true;
+      this.serialdisabled = true;
+    }else if(valType == "Digital"){
+      this.analogdisabled = true;
+      this.digitaldisabled = false;
+      this.serialdisabled = true;
+    }else{
+      this.analogdisabled = true;
+      this.digitaldisabled = true;
+      this.serialdisabled = false;
+    }
+  }
+
 
 
 }

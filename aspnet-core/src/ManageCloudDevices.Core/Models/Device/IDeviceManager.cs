@@ -12,6 +12,7 @@ namespace IDeviceManager
         Task CreateDevice(Device entity);
         Task<Device> GetDeviceByName(string name);
         Task<Device> GetDeviceById(int id);
+        Task UpdateDeviceFromSystem(Device entity);
 
 
     }

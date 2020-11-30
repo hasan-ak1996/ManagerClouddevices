@@ -43,7 +43,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
-import { DeviceControlServiceProxy, DeviceServiceProxy } from '@shared/service-proxies/service-proxies';
+import { DeviceControlServiceProxy, DeviceReadingServiceProxy, DeviceServiceProxy } from '@shared/service-proxies/service-proxies';
 import { AddConnectionComponent } from './add-connection/add-connection.component';
 import { AddControlComponent } from './add-control/add-control.component';
 import {ControlServiceService} from './control-service/control-service.service';
@@ -108,6 +108,8 @@ import {EditControlComponent} from './edit-control/edit-control.component'
     { provide : DeviceServiceProxy , useClass : DeviceServiceProxy},
     { provide: ControlServiceService, useClass: ControlServiceService },
     { provide: DeviceControlServiceProxy, useClass: DeviceControlServiceProxy },
+    { provide: DeviceReadingServiceProxy, useClass: DeviceReadingServiceProxy },
+    
 
     
   ],

@@ -14,6 +14,7 @@ namespace ManageCloudDevices.Device
         Task CreateDevice(DeviceInputDto input);
         Task<DeviceDto> GetDeviceByName( string name );
         Task<DeviceDto> GetDeviceById(int id);
-        Task UpdateDevice(DeviceUpdateInputDto input);
+        Task UpdateDeviceFromSystem(DeviceUpdateInputDto input);
+
     }
 }

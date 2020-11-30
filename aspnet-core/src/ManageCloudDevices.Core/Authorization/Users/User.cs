@@ -10,7 +10,7 @@ namespace ManageCloudDevices.Authorization.Users
     {
         public const string DefaultPassword = "123qwe";
         public Guid SecretKey { get; set; }
-        public virtual List<Device> Devices { get; set; }
+        public List<Device> Devices { get; set; }
 
         public static string CreateRandomPassword()
         {
