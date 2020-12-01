@@ -39,9 +39,9 @@ export class AddConnectionComponent extends AppComponentBase implements OnInit {
       this._deviceService.getDeviceById(this.id).subscribe((res) => {
         this.device = res ;
         if(res.status == 0){
-          this.status = "Disabled"
-        }else{
           this.status = "Active"
+        }else{
+          this.status = "Disabled"
         }
       });
     this.secretkey = this.appSession.user.secretKey;
@@ -112,7 +112,7 @@ export class AddConnectionComponent extends AppComponentBase implements OnInit {
       control.deviceId = this.id;
       
       this._deviceControlService.createControl(control).subscribe(()=>{
-        console.log("ok")
+        
       })
       abp.notify.success(this.l('SuccessfullySaved'));
       this.controlServiceService.controls = [];

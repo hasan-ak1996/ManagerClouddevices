@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace DeviceReadingManagerClass
 {
@@ -30,6 +31,7 @@ namespace DeviceReadingManagerClass
         {
             return await _deviceReadingRepository.GetAllListAsync(r => r.DeviceId == id);
         }
+
 
         public async Task UpdateReadingFromDevice(DeviceReading entity)
         {

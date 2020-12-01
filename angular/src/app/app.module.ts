@@ -47,7 +47,8 @@ import { DeviceControlServiceProxy, DeviceReadingServiceProxy, DeviceServiceProx
 import { AddConnectionComponent } from './add-connection/add-connection.component';
 import { AddControlComponent } from './add-control/add-control.component';
 import {ControlServiceService} from './control-service/control-service.service';
-import {EditControlComponent} from './edit-control/edit-control.component'
+import {EditControlComponent} from './edit-control/edit-control.component';
+import { LastStatusComponent } from './last-status/last-status.component'
 
 
 @NgModule({
@@ -83,6 +84,7 @@ import {EditControlComponent} from './edit-control/edit-control.component'
     AddConnectionComponent,
     AddControlComponent,
     EditControlComponent,
+    LastStatusComponent,
    
   ],
   imports: [

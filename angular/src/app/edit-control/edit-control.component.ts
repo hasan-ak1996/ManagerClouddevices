@@ -15,7 +15,7 @@ export class EditControlComponent extends AppComponentBase  implements OnInit {
   analogdisabled : boolean;
   digitaldisabled : boolean;
   serialdisabled : boolean ;
-  control = new CreateControlInputDto ();
+  control : CreateControlInputDto ;
   @Output() onSave = new EventEmitter<any>();
   constructor(injector: Injector,
     public controlServiceService : ControlServiceService,
@@ -41,14 +41,6 @@ export class EditControlComponent extends AppComponentBase  implements OnInit {
     }
   }
 
-  
-  save(): void {
-    this.control.isAccessed = false;
-    this.saving = true;
-    this.notify.info(this.l('SavedSuccessfully'));
-    this.bsModalRef.hide();
-    this.onSave.emit();
-  }
   selectValue(valType){
     if(valType == "Analog"){
       this.analogdisabled = false;
@@ -63,6 +55,33 @@ export class EditControlComponent extends AppComponentBase  implements OnInit {
       this.digitaldisabled = true;
       this.serialdisabled = false;
     }
+    console.log(valType);
   }
+
+
+  
+
+
+
+  
+  save(): void {
+    this.control.isAccessed = false;
+
+    if( this.analogdisabled == true){
+      this.control.valueAnalog = null
+    }
+    if(this.serialdisabled == true){
+      this.control.valueString = null;
+    }
+    if(this.digitaldisabled == true){
+      this.control.valueDigital = undefined;
+    }
+    console.log(this.control)
+    this.saving = true;
+    this.notify.info(this.l('SavedSuccessfully'));
+    this.bsModalRef.hide();
+    this.onSave.emit();
+  }
+
 
 }

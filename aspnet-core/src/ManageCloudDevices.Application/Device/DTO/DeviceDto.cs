@@ -15,8 +15,8 @@ namespace output.DTO
         public int IP { get; set; }
         public enum myenum
         {
-            Active = 1,
-            Disabled = 0
+            Active = 0,
+            Disabled = 1
         }
         public myenum Status { get; set; }
     }

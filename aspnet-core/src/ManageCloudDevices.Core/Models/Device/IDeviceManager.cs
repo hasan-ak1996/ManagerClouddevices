@@ -13,6 +13,7 @@ namespace IDeviceManager
         Task<Device> GetDeviceByName(string name);
         Task<Device> GetDeviceById(int id);
         Task UpdateDeviceFromSystem(Device entity);
+        Task<List<Device>> GetAllDevicesForUser(int userid);
 
 
     }

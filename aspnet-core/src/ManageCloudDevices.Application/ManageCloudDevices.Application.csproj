@@ -13,6 +13,7 @@
   <ItemGroup>
     <PackageReference Include="Abp.Castle.Log4Net" Version="5.13.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.8" />
+    <PackageReference Include="System.Linq" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ManageCloudDevices.Core\ManageCloudDevices.Core.csproj" />

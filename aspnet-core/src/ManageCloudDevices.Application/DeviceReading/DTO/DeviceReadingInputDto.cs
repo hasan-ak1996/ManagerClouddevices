@@ -15,9 +15,9 @@ namespace DeviceReadingInputDto
         public bool ValueDigital { get; set; }
         public float ValueAnalog { get; set; }
         public enum my { 
-            Digital,
-            Analog,
-            Serial
+            Digital =0,
+            Analog =1,
+            Serial =2
         }
         public my ValueType { get; set; }
     }

@@ -14,8 +14,8 @@ namespace ManageCloudDevices.Models
         public string DeviceName { get; set; }
         public int IP { get; set; }
         public enum myenum { 
-            Active =1 ,
-            Disabled =0 
+            Active =0 ,
+            Disabled =1 
         }
         public myenum Status { get; set; }
         public virtual List<ManageCloudDevices.Models.DeviceControl1.DeviceControl> DeviceControls { get; set; }

@@ -21,6 +21,10 @@ namespace DeviceManager
             await _deviceRepository.InsertAsync(entity);
         }
 
+        public async Task<List<Device>> GetAllDevicesForUser(int userid)
+        {
+            return await _deviceRepository.GetAllListAsync(d => d.UserId == userid);
+        }
 
         public async Task<Device> GetDeviceById(int id)
         {

@@ -10,6 +10,7 @@ using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace ManageCloudDevices.DeviceReading
 {
@@ -43,7 +44,16 @@ namespace ManageCloudDevices.DeviceReading
         public async Task<List<DeviceReadingDto>> GetAllReadingForDevice(int id)
         {
             var getAll = await _deviceReadingManager.GetAllReadingForDevice(id);
+            
             List<DeviceReadingDto> output = _objectMapper.Map<List<ManageCloudDevices.Models.DeviceReading.DeviceReading>, List<DeviceReadingDto>>(getAll);
+            return output;
+        }
+
+        public async Task<List<DeviceReadingDto>> GetLastReadingForDevice(int id)
+        {
+            var AllReading =await _deviceReadingRepository.GetAll().Where(r => r.DeviceId == id).ToListAsync();
+            var LastReadings = AllReading.GroupBy(r => r.ReadingName).SelectMany(y => y.Where(z => z.CreationTime == y.Max(i => i.CreationTime))).ToList();
+            List<DeviceReadingDto> output = _objectMapper.Map<List<ManageCloudDevices.Models.DeviceReading.DeviceReading>, List<DeviceReadingDto>>(LastReadings);
             return output;
         }
 

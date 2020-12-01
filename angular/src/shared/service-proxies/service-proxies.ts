@@ -428,6 +428,66 @@ export class DeviceServiceProxy {
         }
         return _observableOf<void>(<any>null);
     }
+
+    /**
+     * @param userid (optional) 
+     * @return Success
+     */
+    getAllDevicesForUser(userid: number | undefined): Observable<DeviceDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Device/GetAllDevicesForUser?";
+        if (userid === null)
+            throw new Error("The parameter 'userid' cannot be null.");
+        else if (userid !== undefined)
+            url_ += "userid=" + encodeURIComponent("" + userid) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllDevicesForUser(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllDevicesForUser(<any>response_);
+                } catch (e) {
+                    return <Observable<DeviceDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<DeviceDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllDevicesForUser(response: HttpResponseBase): Observable<DeviceDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(DeviceDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<DeviceDto[]>(<any>null);
+    }
 }
 
 @Injectable()
@@ -679,6 +739,118 @@ export class DeviceReadingServiceProxy {
             }));
         }
         return _observableOf<DeviceReadingDto[]>(<any>null);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getLastReadingForDevice(id: number | undefined): Observable<DeviceReadingDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/DeviceReading/GetLastReadingForDevice?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetLastReadingForDevice(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetLastReadingForDevice(<any>response_);
+                } catch (e) {
+                    return <Observable<DeviceReadingDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<DeviceReadingDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetLastReadingForDevice(response: HttpResponseBase): Observable<DeviceReadingDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(DeviceReadingDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<DeviceReadingDto[]>(<any>null);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    updateReadingFromDevice(body: ReadingUpdateDto | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/DeviceReading/UpdateReadingFromDevice";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateReadingFromDevice(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateReadingFromDevice(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateReadingFromDevice(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
     }
 }
 
@@ -2861,6 +3033,79 @@ export interface IDeviceReadingDto {
     valueType: ValEnum;
     creationTime: moment.Moment;
     id: number;
+}
+
+export enum TypeEnum {
+    _0 = 0,
+    _1 = 1,
+    _2 = 2,
+}
+
+export class ReadingUpdateDto implements IReadingUpdateDto {
+    secretKey: string;
+    publicKey: string;
+    readingName: string | undefined;
+    valueString: string | undefined;
+    valueDigital: boolean;
+    valueAnalog: number;
+    valueType: TypeEnum;
+
+    constructor(data?: IReadingUpdateDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.secretKey = _data["secretKey"];
+            this.publicKey = _data["publicKey"];
+            this.readingName = _data["readingName"];
+            this.valueString = _data["valueString"];
+            this.valueDigital = _data["valueDigital"];
+            this.valueAnalog = _data["valueAnalog"];
+            this.valueType = _data["valueType"];
+        }
+    }
+
+    static fromJS(data: any): ReadingUpdateDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ReadingUpdateDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["secretKey"] = this.secretKey;
+        data["publicKey"] = this.publicKey;
+        data["readingName"] = this.readingName;
+        data["valueString"] = this.valueString;
+        data["valueDigital"] = this.valueDigital;
+        data["valueAnalog"] = this.valueAnalog;
+        data["valueType"] = this.valueType;
+        return data; 
+    }
+
+    clone(): ReadingUpdateDto {
+        const json = this.toJSON();
+        let result = new ReadingUpdateDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IReadingUpdateDto {
+    secretKey: string;
+    publicKey: string;
+    readingName: string | undefined;
+    valueString: string | undefined;
+    valueDigital: boolean;
+    valueAnalog: number;
+    valueType: TypeEnum;
 }
 
 export class CreateRoleDto implements ICreateRoleDto {

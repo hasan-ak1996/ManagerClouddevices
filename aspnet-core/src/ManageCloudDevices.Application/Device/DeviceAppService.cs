@@ -69,5 +69,12 @@ namespace ManageCloudDevices.Device
 
 
         }
+
+        public async Task<List<DeviceDto>> GetAllDevicesForUser(int userid)
+        {
+            var getAllDevices = await deviceManager.GetAllDevicesForUser(userid);
+            List<DeviceDto> output = objectMapper.Map<List<ManageCloudDevices.Models.Device>, List<DeviceDto>>(getAllDevices);
+            return output;
+        }
     }
 }

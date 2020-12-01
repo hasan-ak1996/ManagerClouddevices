@@ -2,7 +2,7 @@
   class="form-horizontal"
   autocomplete="off"
   #editControlModal="ngForm"
-  (ngSubmit)="editControlModal.valid && save() "
+  (ngSubmit)=" save() "
 >
     <abp-modal-header
     [title]="'Edit Control' | localize"
@@ -30,7 +30,7 @@
 
             <div class="col-md-6">
                 <div class="form-group required">
-                    <label for="cars">Value Type</label>
+                    <label for="ValueType">Value Type</label>
 
                     <select
                     class="form-control"
@@ -41,9 +41,9 @@
                     [(ngModel)]="control.valueType" 
                     #pinNumberModel="ngModel" 
                     >
-                    <option value="0">Digital</option>
-                    <option value="1">Analog</option>
-                    <option value="2">Serial</option>
+                    <option value="Digital">Digital</option>
+                    <option value="Analog">Analog</option>
+                    <option value="Serial">Serial</option>
                     </select>
                 </div>
 
@@ -53,18 +53,16 @@
 
         <div class="row">
             <div class="col-md-6">
-                <div class="form-group required">
+                <div class="form-group ">
                     <label for="ValueString">
                         {{ "Value String" | localize }}
                     </label>
                     <input
-                    [class.is-invalid]="editControlModal.submitted && !ValueStringModel.valid"
                     class="form-control"
                     type="text"
                     name="ValueString" 
                     id="ValueString" 
                     [disabled]="serialdisabled"
-                    required
                     [(ngModel)]="control.valueString" 
                     #ValueStringModel="ngModel" 
                     >
@@ -73,12 +71,11 @@
             </div>
 
             <div class="col-md-6">
-                <div class="form-group required">
+                <div class="form-group">
                     <label for="valueDigital">
                         {{ "value Digital" | localize }}
                     </label>
                     <input
-                    [class.is-invalid]="editControlModal.submitted && !valueDigitalModel.valid"
                     class="form-control"
                     type="checkbox"
                     name="valueDigital" 
@@ -92,14 +89,13 @@
         </div>
         <div class="row">
             <div class="col-md-6">
-                <div class="form-group required">
+                <div class="form-group">
                     <label for="ValueAnalog ">
                         {{ "Value Analog" | localize }}
                     </label>
                     <input
-                    [class.is-invalid]="editControlModal.submitted && !ValueAnalogModel.valid"
                     class="form-control"
-                    type="text"
+                    type="number"
                     name="ValueAnalog " 
                     id="ValueAnalog " 
                     [disabled]="analogdisabled"
