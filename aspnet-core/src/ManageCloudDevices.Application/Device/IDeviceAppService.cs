@@ -12,7 +12,7 @@ namespace ManageCloudDevices.Device
     public interface IDeviceAppService : IApplicationService
     {
         Task CreateDevice(DeviceInputDto input);
-        Task<DeviceDto> GetDeviceByName( string name );
+        Task<DeviceDto> GetDeviceForView(int userid);
         Task<DeviceDto> GetDeviceById(int id);
         Task UpdateDeviceFromSystem(DeviceUpdateInputDto input);
         Task<List<DeviceDto>> GetAllDevicesForUser(int userid);

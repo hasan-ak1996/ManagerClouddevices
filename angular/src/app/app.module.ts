@@ -48,7 +48,10 @@ import { AddConnectionComponent } from './add-connection/add-connection.componen
 import { AddControlComponent } from './add-control/add-control.component';
 import {ControlServiceService} from './control-service/control-service.service';
 import {EditControlComponent} from './edit-control/edit-control.component';
-import { LastStatusComponent } from './last-status/last-status.component'
+import { LastStatusComponent } from './last-status/last-status.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ReadingsChartComponent } from './readings-chart/readings-chart.component';
+import { ChartsModule } from 'ng2-charts';
 
 
 @NgModule({
@@ -85,6 +88,7 @@ import { LastStatusComponent } from './last-status/last-status.component'
     AddControlComponent,
     EditControlComponent,
     LastStatusComponent,
+    ReadingsChartComponent,
    
   ],
   imports: [
@@ -104,7 +108,9 @@ import { LastStatusComponent } from './last-status/last-status.component'
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    NgxChartsModule,
+    ChartsModule
   ],
   providers: [
     { provide : DeviceServiceProxy , useClass : DeviceServiceProxy},

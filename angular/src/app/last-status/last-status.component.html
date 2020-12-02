@@ -4,11 +4,15 @@ class="form-control"
 #ValueStringModel="ngModel"
 hidden
 >
+
+
 <div class="row">
     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6" *ngFor="let read of deviceReadings;">
         <div class="info-box bg-cyan hover-expand-effect">
             <div class="content">
-                <div class="text">{{read.readingName}} {{read.creationTime._i}}
+                <div class="text">
+                    <p class="mb-0" >{{read.readingName}}</p>
+                    <p class="mb-0" >{{read.creationTime._i}}</p> 
                     <p class="mb-0" *ngIf="read.valueType == 2">{{read.valueString}}</p>
                     <p class="mb-0" *ngIf="read.valueType == 0">{{read.valueDigital}}</p>
                     <p class="mb-0" *ngIf="read.valueType == 1">{{read.valueAnalog}}</p>
@@ -16,5 +20,6 @@ hidden
                 </div>
             </div>
         </div>
+        <readings-chart [deviceId]="read.deviceId" [readingName]="read.readingName"></readings-chart>
     </div>
 </div>

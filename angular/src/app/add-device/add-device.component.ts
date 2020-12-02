@@ -38,11 +38,11 @@ export class AddDeviceComponent extends AppComponentBase  implements OnInit {
           this.saving = false;
         })
       )
-      .subscribe(() => {
-        
+      .subscribe((res) => {
+        console.log(res);
         this.notify.info(this.l('SavedSuccessfully'));
         this.onSave.emit();
-        this._deviceService.getDeviceByName(this.device.deviceName).subscribe((res)=>{
+        this._deviceService.getDeviceForView(this.appSession.userId).subscribe((res)=>{
           this.deviceId = res.id;
           console.log(this.deviceId)
           this.router.navigate(['app/add-connection',  this.deviceId]);

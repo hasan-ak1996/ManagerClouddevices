@@ -49,6 +49,14 @@ namespace ManageCloudDevices.DeviceReading
             return output;
         }
 
+        public async Task<List<DeviceReadingDto>> GetAllReadingsByName(ReadingsByNameInputDto.ReadingsByNameInputDto input)
+        {
+            var getAll = await _deviceReadingManager.GetAllReadingForDevice(input.DeviceId);
+            var readings = getAll.Where(r => r.ReadingName == input.ReadingName).ToList();
+            List<DeviceReadingDto> output = _objectMapper.Map<List<ManageCloudDevices.Models.DeviceReading.DeviceReading>, List<DeviceReadingDto>>(readings);
+            return output;
+        }
+
         public async Task<List<DeviceReadingDto>> GetLastReadingForDevice(int id)
         {
             var AllReading =await _deviceReadingRepository.GetAll().Where(r => r.DeviceId == id).ToListAsync();
@@ -59,12 +67,12 @@ namespace ManageCloudDevices.DeviceReading
 
         public async Task UpdateReadingFromDevice(ReadingUpdateDto input)
         {
-            var user = _userManager.Users.Where(u => u.SecretKey == input.SecretKey).FirstOrDefault();
+            var user = await _userManager.Users.Where(u => u.SecretKey == input.SecretKey).FirstOrDefaultAsync();
             var userId = user.Id;
-            var devicesFromUser = _deviceRepository.GetAll().Where(d => d.UserId == userId).ToList();
+            var devicesFromUser = await _deviceRepository.GetAll().Where(d => d.UserId == userId).ToListAsync();
             var device = devicesFromUser.Where(d => d.PublicKey == input.PublicKey).FirstOrDefault();
             var deviceId = device.Id;
-            var deviceReadingsFromDevice = _deviceReadingRepository.GetAll().Where(c => c.DeviceId == deviceId).ToList();
+            var deviceReadingsFromDevice = await _deviceReadingRepository.GetAll().Where(c => c.DeviceId == deviceId).ToListAsync();
             var deviceReading = deviceReadingsFromDevice.Where(r => r.ReadingName == input.ReadingName).FirstOrDefault();
             deviceReading.ValueType = (Models.DeviceReading.DeviceReading.VlaueEnum)input.ValueType;
             deviceReading.ValueAnalog = input.ValueAnalog;

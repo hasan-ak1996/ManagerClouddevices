@@ -10,6 +10,7 @@ using update.DTO;
 using System.Linq;
 using Abp.Domain.Repositories;
 using ManageCloudDevices.Authorization.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace ManageCloudDevices.Device
 {
@@ -41,9 +42,13 @@ namespace ManageCloudDevices.Device
 
         }
 
-        public async Task<DeviceDto> GetDeviceByName(string name)
+        public async Task<DeviceDto> GetDeviceForView(int userid)
         {
-            var device = await deviceManager.GetDeviceByName(name);
+            var user = await _userManager.Users.Where(u => u.Id == userid).FirstOrDefaultAsync();
+            var userId = user.Id;
+            var devicesFromUser = await deviceRepository.GetAll().Where(d => d.UserId == userId).ToListAsync();
+            var lastdeviceCreated = devicesFromUser.Max(d => d.CreationTime);
+            var device = devicesFromUser.Where(d => d.CreationTime == lastdeviceCreated).FirstOrDefault();
             DeviceDto output = objectMapper.Map<ManageCloudDevices.Models.Device, DeviceDto>(device);
             return output;
         }
@@ -58,9 +63,9 @@ namespace ManageCloudDevices.Device
 
         public async Task UpdateDeviceFromSystem(DeviceUpdateInputDto input)
         {
-           var user =  _userManager.Users.Where(u => u.SecretKey == input.SecretKey).FirstOrDefault();
+           var user = await _userManager.Users.Where(u => u.SecretKey == input.SecretKey).FirstOrDefaultAsync();
             var userId = user.Id;
-            var devicesFromUser = deviceRepository.GetAll().Where(d => d.UserId == userId).ToList();
+            var devicesFromUser = await deviceRepository.GetAll().Where(d => d.UserId == userId).ToListAsync();
            var device = devicesFromUser.Where(d => d.PublicKey == input.PublicKey).FirstOrDefault();
             device.IP = input.IP;
             device.PrivateKey = input.PrivateKey;

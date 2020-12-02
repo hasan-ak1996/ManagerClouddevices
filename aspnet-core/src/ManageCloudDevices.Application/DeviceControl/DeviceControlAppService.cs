@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Abp.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace ManageCloudDevices.DeviceControl
 {
@@ -41,12 +42,12 @@ namespace ManageCloudDevices.DeviceControl
 
         public async Task<GetValueControlOutputDto.GetValueControlOutputDto> GetValueControl(ReadingValueInputDto.ReadingValueInputDto input)
         {
-            var user =  _userManager.Users.Where(u => u.SecretKey == input.SecretKey).FirstOrDefault();
+            var user = await  _userManager.Users.Where(u => u.SecretKey == input.SecretKey).FirstOrDefaultAsync();
             var userId = user.Id;
-            var devicesFromUser = _deviceRepository.GetAll().Where(d => d.UserId == userId).ToList();
+            var devicesFromUser = await _deviceRepository.GetAll().Where(d => d.UserId == userId).ToListAsync();
             var device = devicesFromUser.Where(d => d.PublicKey == input.PublicKey).FirstOrDefault();
             var deviceId = device.Id;
-            var deviceControlsFromDevice = _deviceControlRepository.GetAll().Where(c => c.DeviceId == deviceId).ToList();
+            var deviceControlsFromDevice = await _deviceControlRepository.GetAll().Where(c => c.DeviceId == deviceId).ToListAsync();
             var deviceControl = deviceControlsFromDevice.Where(c => c.PinNumber == input.PinNumber).FirstOrDefault();
 
             GetValueControlOutputDto.GetValueControlOutputDto output =  objectMapper.Map<ManageCloudDevices.Models.DeviceControl1.DeviceControl, GetValueControlOutputDto.GetValueControlOutputDto>(deviceControl);

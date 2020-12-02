@@ -9,6 +9,7 @@ namespace ManageCloudDevices.DeviceReadingDTO
     [AutoMap(typeof(ManageCloudDevices.Models.DeviceReading.DeviceReading))]
     public class DeviceReadingDto : EntityDto
     {
+        public int DeviceId { get; set; }
         public string ReadingName { get; set; }
         public string ValueString { get; set; }
         public bool ValueDigital { get; set; }

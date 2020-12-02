@@ -268,13 +268,15 @@ export class DeviceServiceProxy {
     }
 
     /**
-     * @param name (optional) 
+     * @param userid (optional) 
      * @return Success
      */
-    getDeviceByName(name: string | null | undefined): Observable<DeviceDto> {
-        let url_ = this.baseUrl + "/api/services/app/Device/GetDeviceByName?";
-        if (name !== undefined && name !== null)
-            url_ += "name=" + encodeURIComponent("" + name) + "&";
+    getDeviceForView(userid: number | undefined): Observable<DeviceDto> {
+        let url_ = this.baseUrl + "/api/services/app/Device/GetDeviceForView?";
+        if (userid === null)
+            throw new Error("The parameter 'userid' cannot be null.");
+        else if (userid !== undefined)
+            url_ += "userid=" + encodeURIComponent("" + userid) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -286,11 +288,11 @@ export class DeviceServiceProxy {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetDeviceByName(response_);
+            return this.processGetDeviceForView(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetDeviceByName(<any>response_);
+                    return this.processGetDeviceForView(<any>response_);
                 } catch (e) {
                     return <Observable<DeviceDto>><any>_observableThrow(e);
                 }
@@ -299,7 +301,7 @@ export class DeviceServiceProxy {
         }));
     }
 
-    protected processGetDeviceByName(response: HttpResponseBase): Observable<DeviceDto> {
+    protected processGetDeviceForView(response: HttpResponseBase): Observable<DeviceDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -716,6 +718,69 @@ export class DeviceReadingServiceProxy {
     }
 
     protected processGetAllReadingForDevice(response: HttpResponseBase): Observable<DeviceReadingDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(DeviceReadingDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<DeviceReadingDto[]>(<any>null);
+    }
+
+    /**
+     * @param deviceId (optional) 
+     * @param readingName (optional) 
+     * @return Success
+     */
+    getAllReadingsByName(deviceId: number | undefined, readingName: string | null | undefined): Observable<DeviceReadingDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/DeviceReading/GetAllReadingsByName?";
+        if (deviceId === null)
+            throw new Error("The parameter 'deviceId' cannot be null.");
+        else if (deviceId !== undefined)
+            url_ += "DeviceId=" + encodeURIComponent("" + deviceId) + "&";
+        if (readingName !== undefined && readingName !== null)
+            url_ += "ReadingName=" + encodeURIComponent("" + readingName) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllReadingsByName(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllReadingsByName(<any>response_);
+                } catch (e) {
+                    return <Observable<DeviceReadingDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<DeviceReadingDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllReadingsByName(response: HttpResponseBase): Observable<DeviceReadingDto[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -2969,6 +3034,7 @@ export enum ValEnum {
 }
 
 export class DeviceReadingDto implements IDeviceReadingDto {
+    deviceId: number;
     readingName: string | undefined;
     valueString: string | undefined;
     valueDigital: boolean;
@@ -2988,6 +3054,7 @@ export class DeviceReadingDto implements IDeviceReadingDto {
 
     init(_data?: any) {
         if (_data) {
+            this.deviceId = _data["deviceId"];
             this.readingName = _data["readingName"];
             this.valueString = _data["valueString"];
             this.valueDigital = _data["valueDigital"];
@@ -3007,6 +3074,7 @@ export class DeviceReadingDto implements IDeviceReadingDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["deviceId"] = this.deviceId;
         data["readingName"] = this.readingName;
         data["valueString"] = this.valueString;
         data["valueDigital"] = this.valueDigital;
@@ -3026,6 +3094,7 @@ export class DeviceReadingDto implements IDeviceReadingDto {
 }
 
 export interface IDeviceReadingDto {
+    deviceId: number;
     readingName: string | undefined;
     valueString: string | undefined;
     valueDigital: boolean;

@@ -15,5 +15,7 @@ namespace ManageCloudDevices.DeviceReading
         Task<List<DeviceReadingDto>> GetAllReadingForDevice(int id);
         Task UpdateReadingFromDevice(ReadingUpdateDto input);
         Task<List<DeviceReadingDto>> GetLastReadingForDevice(int id);
+        Task<List<DeviceReadingDto>> GetAllReadingsByName(ReadingsByNameInputDto.ReadingsByNameInputDto input);
+
     }
 }
