@@ -52,6 +52,9 @@ import { LastStatusComponent } from './last-status/last-status.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ReadingsChartComponent } from './readings-chart/readings-chart.component';
 import { ChartsModule } from 'ng2-charts';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { ToggleButtonComponent } from './toggle-button/toggle-button.component';
+import { FullDataReadingComponent } from './full-data-reading/full-data-reading.component';
 
 
 @NgModule({
@@ -89,6 +92,8 @@ import { ChartsModule } from 'ng2-charts';
     EditControlComponent,
     LastStatusComponent,
     ReadingsChartComponent,
+    ToggleButtonComponent,
+    FullDataReadingComponent,
    
   ],
   imports: [
@@ -110,7 +115,8 @@ import { ChartsModule } from 'ng2-charts';
     MatInputModule,
     MatSelectModule,
     NgxChartsModule,
-    ChartsModule
+    ChartsModule,
+    MatSlideToggleModule
   ],
   providers: [
     { provide : DeviceServiceProxy , useClass : DeviceServiceProxy},

@@ -6,6 +6,8 @@ import { CreateControlInputDto } from '@shared/service-proxies/service-proxies';
 })
 export class ControlServiceService {
   controls  : CreateControlInputDto[] =[];
+  toggleVal : boolean = false;
+  iii : number;
 
 addItem(item : CreateControlInputDto){
     this.controls.push(item);

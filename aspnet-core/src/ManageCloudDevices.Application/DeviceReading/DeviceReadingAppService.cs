@@ -8,9 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using Abp.Linq.Extensions;
 using System.Threading.Tasks;
 using Abp.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Abp.Application.Services.Dto;
 
 namespace ManageCloudDevices.DeviceReading
 {
@@ -41,12 +43,13 @@ namespace ManageCloudDevices.DeviceReading
             ManageCloudDevices.Models.DeviceReading.DeviceReading output = _objectMapper.Map<DeviceReadingInputDto.DeviceReadingInputDto, ManageCloudDevices.Models.DeviceReading.DeviceReading>(input);
             await _deviceReadingManager.CreateReading(output);
         }
-        public async Task<List<DeviceReadingDto>> GetAllReadingForDevice(int id)
-        {
-            var getAll = await _deviceReadingManager.GetAllReadingForDevice(id);
-            
-            List<DeviceReadingDto> output = _objectMapper.Map<List<ManageCloudDevices.Models.DeviceReading.DeviceReading>, List<DeviceReadingDto>>(getAll);
-            return output;
+        public async Task<PagedResultDto<DeviceReadingDto>> GetAllReadingForDevice(PagedReadingResultRequestDto input)
+      {
+            var getAll = await _deviceReadingRepository.GetAll().Where(r => r.DeviceId == input.DeviceId).PageBy(input).ToListAsync();
+            return new PagedResultDto<DeviceReadingDto>
+            {
+                Items = _objectMapper.Map<List<ManageCloudDevices.Models.DeviceReading.DeviceReading>, List<DeviceReadingDto>>(getAll)
+            };
         }
 
         public async Task<List<DeviceReadingDto>> GetAllReadingsByName(ReadingsByNameInputDto.ReadingsByNameInputDto input)
@@ -56,6 +59,7 @@ namespace ManageCloudDevices.DeviceReading
             List<DeviceReadingDto> output = _objectMapper.Map<List<ManageCloudDevices.Models.DeviceReading.DeviceReading>, List<DeviceReadingDto>>(readings);
             return output;
         }
+
 
         public async Task<List<DeviceReadingDto>> GetLastReadingForDevice(int id)
         {

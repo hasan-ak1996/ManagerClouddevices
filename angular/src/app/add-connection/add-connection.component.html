@@ -163,41 +163,49 @@
                 </div>
                 </div>
 
-                <div class="row mt-3">
-                <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                    <h5 class="card-title">Device Readings</h5>
-                    </div>
-                    <div class="card-body table-responsive p-0">
+             <!--   <div class="row mt-3">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                            <h5 class="card-title">Device Readings</h5>
+                            </div>
+                            <div class="card-body table-responsive p-0">
+                    
+                            <table class="table table-hover text-nowrap">
+                                    <thead class="bg-light">
+                                        <th> {{ "Reading Name  " | localize }}</th>
+                                        <th>{{ "Value " | localize }}</th>
+                                        <th>{{ "CreatedOn " | localize }}</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let read of readings;">
+                                            <td>{{read.readingName}}</td>
+                                            <td  *ngIf="read.valueType == 2">{{read.valueString}}</td>
+                                            <td *ngIf="read.valueType == 0">{{read.valueDigital}}</td>
+                                            <td  *ngIf="read.valueType == 1">{{read.valueAnalog}}</td>
+                                            <td>{{read.creationTime._i}}</td>
+                                             
+                    
+                                            
+                                        </tr>
+                                    </tbody>
+                                </table> 
+                            </div>
+                        </div>
+                        </div>
+                </div> -->
 
-                        <table class="table table-hover text-nowrap">
-                            <thead class="bg-light">
-                                <th> {{ "Reading Name  " | localize }}</th>
-                                <th>{{ "Value " | localize }}</th>
-                                <th>{{ "CreatedOn " | localize }}</th>
-                            </thead>
-                            <tbody>
-                                <tr *ngIf="!readings.length">
-                                    <td class="text-center font-italic" colspan="7">
-                                        {{ "No Readings for this device" | localize }}
-                                    </td>
-                                </tr>
-                                <tr *ngFor="let read of readings ; let i=index">
-                                    <td>{{read.readingName}}</td>
-                                    <td  *ngIf="read.valueType == 2">{{read.valueString}}</td>
-                                    <td *ngIf="read.valueType == 0">{{read.valueDigital}}</td>
-                                    <td  *ngIf="read.valueType == 1">{{read.valueAnalog}}</td>
-                                    <td>{{read.creationTime._i}}</td>
-                                    
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                </div>
-                </div>
 
+
+
+                    <form [formGroup]="setIdForm">
+                        <full-data-reading  formControlName="devId" name="devId"></full-data-reading>
+                    </form> 
+
+
+                
+               
+               
                 <div class="form-group">
                     <button class="btn btn-primary" type="submit">{{ "Save" | localize }} </button>
                 </div>

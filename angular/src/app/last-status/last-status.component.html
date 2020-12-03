@@ -21,5 +21,8 @@ hidden
             </div>
         </div>
         <readings-chart [deviceId]="read.deviceId" [readingName]="read.readingName"></readings-chart>
+        <label><span>Analog</span><mat-slide-toggle class="mb-0" name="toggle" [(ngModel)]="toggle"></mat-slide-toggle><span>Digital</span></label>
+        <toggle-button [(ngModel)]="toggle"></toggle-button>
     </div>
+
 </div>

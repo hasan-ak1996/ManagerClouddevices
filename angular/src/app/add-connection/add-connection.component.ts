@@ -1,4 +1,5 @@
 import { Component, Injector, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AddControlComponent } from '@app/add-control/add-control.component';
 import { ControlServiceService } from '@app/control-service/control-service.service';
@@ -17,8 +18,9 @@ export class AddConnectionComponent extends AppComponentBase implements OnInit {
   device = new DeviceDto ();
   secretkey;
   status;
+  setIdForm : FormGroup;
   conrols : CreateControlInputDto[] = [];
-  readings : DeviceReadingDto[] = [];
+  //readings : DeviceReadingDto[] = [];
   constructor(njector: Injector,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
@@ -28,6 +30,7 @@ export class AddConnectionComponent extends AppComponentBase implements OnInit {
     public controlServiceService : ControlServiceService,
     public deviceReadingServiceProxy : DeviceReadingServiceProxy,
     private router: Router,
+    private formBuilder : FormBuilder
     )
      {
     super(njector);
@@ -36,6 +39,7 @@ export class AddConnectionComponent extends AppComponentBase implements OnInit {
   ngOnInit(): void {
     this._activatedRoute.params.subscribe((params: Params) => {
       this.id = params['id']; });
+      this.controlServiceService.iii = this.id;
       this._deviceService.getDeviceById(this.id).subscribe((res) => {
         this.device = res ;
         if(res.status == 0){
@@ -44,11 +48,20 @@ export class AddConnectionComponent extends AppComponentBase implements OnInit {
           this.status = "Disabled"
         }
       });
+
+      this.setIdForm = this.formBuilder.group({
+        'devId' :new FormControl('',[
+        ])
+      });
+
+      this.setIdForm.get("devId").setValue(this.id);
+
+
     this.secretkey = this.appSession.user.secretKey;
-    this.deviceReadingServiceProxy.getAllReadingForDevice(this.id).subscribe((res) =>{
-      this.readings = res;
-      console.log(this.readings)
-    })
+//  this.deviceReadingServiceProxy.getAllReadingsForDevice(this.id).subscribe((res) =>{
+  //  this.readings = res;
+   //  console.log(this.readings)
+  //  })
   }
 
   createControl(): void {

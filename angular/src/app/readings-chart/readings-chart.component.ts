@@ -17,12 +17,14 @@ import { Color, Label } from 'ng2-charts';
   ]
 })
 export class ReadingsChartComponent implements ControlValueAccessor{
-  readings :number [] = [];
+  readings :any [] = [];
   test3 : number [] =[];
+  toggle;
+  toggleVal = this.controlServiceService.toggleVal;
   public lineChartData: ChartDataSets[] = [
-    { data: this.readings, label: 'Series A' },
+    { data: this.readings, label: 'value' },
   ];
-  public lineChartLabels: Label[] = ['0', '10', '20', '30', '40', '50', '60'];
+  public lineChartLabels: Label[] = ['0', '10', '20', '30', '40', '50', '60','70','80','90','100'];
 
   public lineChartColors: Color[] = [
     {
@@ -43,21 +45,17 @@ export class ReadingsChartComponent implements ControlValueAccessor{
   @Input() readingName;
   onChange: any = () => {}
   onTouch: any = () => {}
-
-
-
-
   set value(val){
     if( val !== undefined && this.deviceId !== val && val !== null ){
       this.deviceId = val;
       this.onChange(val);
       this.onTouch(val);
-      console.log("ok")
+      console.log(this.toggleVal)
     }
   }
-
   writeValue(value: any): void {
-    this.value = value
+    this.value = value;
+    
   }
   registerOnChange(fn: any): void {
     this.onChange = fn
@@ -70,14 +68,25 @@ export class ReadingsChartComponent implements ControlValueAccessor{
   }
 
   ngOnInit(): void {
-      console.log(this.deviceId);
-      console.log(this.readingName);
       this.deviceReadingServiceProxy.getAllReadingsByName(this.deviceId,this.readingName).subscribe((res)=>{
-        res.forEach((i) => {
-         this.readings.push(parseInt(i.valueString))
-        });
+        if(this.toggleVal == false){
+          res.forEach((i) => {
+            if(i.valueType == 1){
+              this.readings.push(i.valueAnalog)
+            }
+            
+           })
+        }else{
+          res.forEach((i) => {
+            if(i.valueType == 0)
+            this.readings.push(i.valueDigital)
+           })
+        }
+       
       })
-
+      
   }
 
 }
+
+

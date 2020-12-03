@@ -1,0 +1,57 @@
+<input
+hidden
+class="form-control"
+[(ngModel)]="value" 
+#ValueStringModel="ngModel"
+>
+<div class="row mt-3">
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+        <h5 class="card-title">Device Readings</h5>
+        </div>
+        <div class="card-body table-responsive p-0">
+
+        <table class="table table-hover text-nowrap">
+                <thead class="bg-light">
+                    <th> {{ "Reading Name  " | localize }}</th>
+                    <th>{{ "Value " | localize }}</th>
+                    <th>{{ "CreatedOn " | localize }}</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let read of readings
+                    | paginate
+                    : {
+                        id: 'server',
+                        itemsPerPage: pageSize,
+                        currentPage: pageNumber
+                      }">
+                        <td>{{read.readingName}}</td>
+                        <td  *ngIf="read.valueType == 2">{{read.valueString}}</td>
+                        <td *ngIf="read.valueType == 0">{{read.valueDigital}}</td>
+                        <td  *ngIf="read.valueType == 1">{{read.valueAnalog}}</td>
+                        <td>{{read.creationTime._i}}</td>
+                         
+
+                        
+                    </tr>
+                </tbody>
+            </table> 
+        </div>
+        <div class="card-footer bg-light border-top">
+            <div class="row">
+              <div class="col-sm-4 col-12">
+                <div class="float-sm-right m-auto">
+                  <abp-pagination-controls
+                    id="server"
+                    (pageChange)="getDataPage($event)"
+                  >
+                  </abp-pagination-controls>
+                </div>
+              </div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+    </div>

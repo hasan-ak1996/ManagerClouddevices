@@ -12,6 +12,8 @@ export class HomeComponent extends AppComponentBase implements OnInit {
   userId ;
   devices : DeviceDto[] = [];
   deviceIdTest;
+  toggleValue;
+
   constructor(
     injector: Injector,
     private router : Router,
